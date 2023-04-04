@@ -15,7 +15,7 @@ int main(){
     printf("               _|_____|_        \\ \\_/  ||                              \n");
     printf("              | | === | |        \\|\\ /| ||                              \n");
     printf("              |_|  O  |_|        # _ _/ #                               \n");
-    printf("               ||  O  ||          | | |                                 \n");
+    printf("               ||  O  ||          | | |    [range do numero secreto: 0-99]  \n");
     printf("               ||__*__||          | | |                                \n ");
     printf("\n\n");
 

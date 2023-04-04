@@ -210,7 +210,7 @@ printf("/- (*) |*)\\  \n");
 printf("|/\\.  _>/\\|   \n");
 printf("    \\__/    |\\          Ih, bruxao, perdesse, mas nao desanima nao, \n");
 printf("   _| |_   \\-/         Dobby esta muito confiante e apostou em voce! \n");
-printf("  /|\\__|\\  //          A palavra da vez era **%s** \n", feiticosecreto);                 
+printf("  /|\\__|\\  //          O feitico da vez era **%s** \n", feiticosecreto);                 
 printf(" |/|   |\\//  \n");
 printf(" |||   | ~'   \n");
 printf(" ||| __|   \n");
