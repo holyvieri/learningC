@@ -3,6 +3,7 @@
 #define CAMINHO '.'
 #define PAREDE_VERTICAL '|'
 #define PAREDE_HORIZONTAL '-'
+#define DRUGS 'D'
 
 struct mapa{
     char** matriz;
@@ -19,15 +20,17 @@ struct posicao{
 };
 typedef struct posicao POSICAO;
 
-void libera_mapa(MAPA *m);
-void aloca_mapa(MAPA *m);
-void ler_mapa(MAPA *m);
-void imprime_mapa(MAPA *m);
-void encontra_mapa(MAPA* m, POSICAO* p, char c);
-int validaparede_mapa(MAPA *m, int x, int y);
-int pontocaminho_mapa(MAPA *m, int x, int y);
-void andando_mapa(MAPA* m, int xorigem, int yorigem, int destinox, int destinoy);
 void copia_mapa(MAPA* destino, MAPA* origem);
+int ehparede(MAPA* m, int x, int y);
+int ehpersonagem(MAPA* m, char personagem, int x, int y);
+int podeandar(MAPA* m, char personagem, int x, int y);
+void andar_mapa(MAPA* m, int xorigem, int yorigem, int destinox, int destinoy);
+int ehpermitido_mapa(MAPA *m, int x, int y);
+void ler_mapa(MAPA *m);
+void aloca_mapa(MAPA *m);
+void libera_mapa(MAPA *m);
+void imprime_mapa(MAPA *m);
+int encontra_mapa(MAPA* m, POSICAO* p, char c);
 
 // preciso passar o ponteiro como parâmetro para q a variavel funcione, pois variavel global funciona APENAS no ARQUIVO em q foi DECLARADA
 // mas para que uma variavel global seja GLOBAL DE VERDADE, preciso redeclarala como 'extern', exemplo:

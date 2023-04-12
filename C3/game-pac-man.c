@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 #include"pacman.h"
 #include"mapa.h"
 
@@ -20,46 +21,24 @@ x.matriz = mapa;*/
 
 MAPA m; // struct = serve p agrupar um conjunto de variáveis que não podem andar separadas; definir um conjunto de dados
 POSICAO doll;
-
-void ghosts(){
-    MAPA copia;
-
-    copia_mapa(&copia,&m);
-
-    for (int i = 0; i < m.linhas; i++){
-        for (int j = 0; j < m.colunas; j++){
-
-            if (copia.matriz[i][j]== GHOST){
-                if (validaparede_mapa(&m, i, j+1) && pontocaminho_mapa(&m, i, j+1)){
-                    andando_mapa(&m,i,j,i,j+1);
-                }
-                
-            }
-            
-        }
-        
-    }
-    
-    libera_mapa(&copia);
-}
+int drugs = 0;
 
 int acabou(){
-    return 0;
+
+    POSICAO pos;
+    
+    int perdeu = !encontra_mapa(&m, &pos, DOLL);
+    int ganhou = !encontra_mapa(&m, &pos, GHOST);
+
+    return ganhou || perdeu;
 }
 
 // esses || significam "ou"
 int ehdirecao(char direcao){
-    return direcao == 'a'|| 
-        direcao =='w'||
-        direcao =='s'||
-        direcao =='d';
+    return (direcao == ESQUERDA|| direcao == CIMA|| direcao == BAIXO|| direcao == DIREITA);
 }
 
 void move(char direcao){
-
-    if (!ehdirecao(direcao)){
-        return;
-    }
 
     int nextx = doll.x;
     int nexty = doll.y;
@@ -81,17 +60,74 @@ void move(char direcao){
         break;
     }
 
-    if(!validaparede_mapa(&m, nextx, nexty)){
-        return;
-    }
-    if(!pontocaminho_mapa(&m, nextx, nexty)){
+    if(!podeandar(&m, DOLL, nextx, nexty)){
         return;
     }
 
-   andando_mapa(&m, doll.x, doll.y, nextx, nexty);
+    if(ehpersonagem(&m, DRUGS, nextx, nexty)){
+        drugs = 1;
+    }
+
+   andar_mapa(&m, doll.x, doll.y, nextx, nexty);
    // atualizando a posição do personagem:
    doll.x = nextx;
    doll.y = nexty;
+}
+
+int goghosts (int xatual, int yatual, int *destinox, int *destinoy){
+
+    int opcoes [4][2]={
+        {xatual, yatual+1},
+        {xatual+1,yatual},
+        {xatual, yatual-1},
+        {xatual-1, yatual}
+    };
+
+    srand(time(0));
+    for (int i = 0; i < 10; i++){
+        int posicao = rand() % 4;
+
+        if(podeandar(&m, GHOST, opcoes[posicao][0], opcoes[posicao][1])){
+            *destinox = opcoes[posicao][0];
+            *destinoy = opcoes[posicao][1];
+            return 1;
+        }
+    }
+    
+    return 0;
+}
+
+void ghosts(){
+    MAPA copia;
+
+    copia_mapa(&copia, &m);
+
+    for(int i = 0; i < copia.linhas; i++){
+        for(int j = 0; j < copia.colunas; j++){
+             if (copia.matriz[i][j] == GHOST){
+
+                int destinox;
+                int destinoy;
+
+                int encontrou = goghosts(i, j, &destinox, &destinoy);
+
+                if (encontrou){
+                    andar_mapa(&m, i, j, destinox, destinoy);
+                }
+            } 
+        }
+    }
+    
+    libera_mapa(&copia);
+}
+
+void kabum_drugs(int x, int y, int qtd){
+    
+    if (qtd==0){
+        return 0;
+    }
+    m.matriz[x][y+1] = CAMINHO; // explodir a direita sempre
+    kabum_drugs(x, y+1, qtd-1);// função recursiva: chama a prórpia função, tem q pensar em qnd vai parar
 }
 
 int main(){
@@ -100,11 +136,20 @@ int main(){
    encontra_mapa(&m, &doll, DOLL);
 
     do{
+
+        printf("Drugs: %s\n",(drugs ? "YES" : "NO"));
         imprime_mapa(&m);
 
         char comando;
         scanf(" %c", &comando);
-        move(comando);
+
+        if (ehdirecao(comando)){
+            move(comando);
+        }
+        if (comando == BOMB){
+            kabum_drugs(doll.x, doll.y, 3);
+        }
+        
         ghosts();
 
     }while (!acabou());

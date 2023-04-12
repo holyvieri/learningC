@@ -14,27 +14,38 @@ void copia_mapa(MAPA* destino, MAPA* origem){
     }
     
 }
-void andando_mapa(MAPA* m, int xorigem, int yorigem, int destinox, int destinoy){
+
+int ehparede(MAPA* m, int x, int y){
+    return m->matriz[x][y] == PAREDE_VERTICAL || m->matriz[x][y] == PAREDE_HORIZONTAL;
+}
+
+int ehpersonagem(MAPA* m, char personagem, int x, int y){
+    return m->matriz[x][y] == personagem;
+}
+
+int podeandar(MAPA* m, char personagem, int x, int y){
+
+    return ehpermitido_mapa(m, x, y) && !ehparede(m, x, y) && !ehpersonagem(m, personagem, x, y);
+}
+
+void andar_mapa(MAPA* m, int xorigem, int yorigem, int destinox, int destinoy){
     char personagem = m->matriz[xorigem][yorigem];
     m->matriz [destinox][destinoy] = personagem;
     m->matriz [xorigem][yorigem] = CAMINHO;
 
 }
 
-int validaparede_mapa(MAPA *m, int x, int y){
+int ehpermitido_mapa(MAPA *m, int x, int y){
     if(x >= m->linhas){
-        return;
+        return 0;
     }
     if(y >= m->colunas){
-        return;
+        return 0;
     }
 
     return 1;
 }
 
-int pontocaminho_mapa(MAPA *m, int x, int y){
-    m->matriz[x][y] == CAMINHO;
-}
 // lembra que para pegar o conteúdo de um ponteiro tem q adicionar uma * antes dele. mas, p PONTEIRO DE STRUCT, tbm pode ser o ponto da struct [m] mais "->" sendo direcionado p outra coisa
 
 void ler_mapa(MAPA *m){
@@ -80,7 +91,7 @@ void imprime_mapa(MAPA *m){
     }
 }
 
-void encontra_mapa(MAPA* m, POSICAO* p, char c){
+int encontra_mapa(MAPA* m, POSICAO* p, char c){
     // esse char é o caractere q vou achar no mapa
  // achar a posição do pac man: vou varrer a matriz a CADA tecla digitada e qnd encontrar a posição i,j q corresponder ao meu bonequinho, vou ent definir a equivalência dessa posição com x e y.
     for (int i = 0; i < m->linhas; i++){
@@ -88,10 +99,12 @@ void encontra_mapa(MAPA* m, POSICAO* p, char c){
             if (m->matriz[i][j] == c){
                 p->x = i;
                 p->y = j;
-                return;
+                return 1;
             }
             
         }
         
     }
+    // nao encontra
+    return 0;
 }

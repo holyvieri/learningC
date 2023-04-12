@@ -2,8 +2,11 @@
 #define BAIXO 's'
 #define DIREITA 'd'
 #define ESQUERDA 'a'
+#define BOMB 'b'
 
 int acabou();
-void move(char direcao);
-void ghosts();
 int ehdirecao(char direcao);
+void kabum_drugs(int x, int y, int qtd);
+void move(char direcao);
+int goghosts (int xatual, int yatual, int *destinox, int *destinoy);
+void ghosts();
