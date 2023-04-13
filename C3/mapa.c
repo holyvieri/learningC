@@ -85,11 +85,6 @@ void libera_mapa(MAPA *m){
     free((*m).matriz); // pq não posso escrever só isso p liberar a matriz toda?
 }
 
-void imprime_mapa(MAPA *m){
-    for (int i = 0; i < m->linhas; i++){
-        printf("%s\n", m->matriz[i]);
-    }
-}
 
 int encontra_mapa(MAPA* m, POSICAO* p, char c){
     // esse char é o caractere q vou achar no mapa

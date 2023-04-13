@@ -3,6 +3,7 @@
 #include<time.h>
 #include"pacman.h"
 #include"mapa.h"
+#include"ui.h"
 
 // armazenando na posição i x j: 
 /* mapa [i] [j] = '|';*/
@@ -30,7 +31,15 @@ int acabou(){
     int perdeu = !encontra_mapa(&m, &pos, DOLL);
     int ganhou = !encontra_mapa(&m, &pos, GHOST);
 
-    return ganhou || perdeu;
+    if (ganhou){
+        printf("GANHOU!! EXPLODISSE OS DOIS, MT FERA!\n");
+        return ganhou;
+    }else if(perdeu){
+        printf("PERDESSE! TENTA DNV!\n");
+        return perdeu;
+    }else{
+        return 0;
+    }
 }
 
 // esses || significam "ou"
@@ -121,13 +130,38 @@ void ghosts(){
     libera_mapa(&copia);
 }
 
-void kabum_drugs(int x, int y, int qtd){
+void kabum_drugs(){
+    
+    if (!drugs){
+        return;
+    }
+    
+    kabum_drugs2(doll.x, doll.y, 0, 1, 3);
+    kabum_drugs2(doll.x, doll.y, 0, -1, 3);
+    kabum_drugs2(doll.x, doll.y, 1, 0, 3);
+    kabum_drugs2(doll.x, doll.y, -1, 0, 3);
+
+    drugs = 0;
+}
+
+void kabum_drugs2(int x, int y, int somax, int somay, int qtd){
     
     if (qtd==0){
-        return 0;
+        return;
     }
-    m.matriz[x][y+1] = CAMINHO; // explodir a direita sempre
-    kabum_drugs(x, y+1, qtd-1);// função recursiva: chama a prórpia função, tem q pensar em qnd vai parar
+
+    int novox = x+somax;
+    int novoy = y+somay;
+
+    if (!ehpermitido_mapa(&m, novox, novoy)){
+        return;
+    }
+    if (ehparede(&m, novox, novoy)){
+        return;
+    }
+    
+    m.matriz[novox][novoy]=CAMINHO; // explodir a direita sempre
+    kabum_drugs2(novox, novoy, somax, somay, qtd-1);// função recursiva: chama a prórpia função, tem q pensar em qnd vai parar
 }
 
 int main(){
@@ -147,13 +181,29 @@ int main(){
             move(comando);
         }
         if (comando == BOMB){
-            kabum_drugs(doll.x, doll.y, 3);
+            kabum_drugs();
         }
         
         ghosts();
 
     }while (!acabou());
     
+    printf("Queres jogar mais uma partida? [S/N]\n");
+    char again;
+    scanf(" %c", &again);
+
+    switch (again){
+    case 'S':
+    case 's':
+        libera_mapa(&m);
+        return main();
+    case 'N':
+    case 'n':
+        break;
+    default:
+        break;
+    }
+
     libera_mapa(&m);
 
 }

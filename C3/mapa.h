@@ -1,3 +1,6 @@
+#ifndef _MAPA_H_
+#define _MAPA_H_
+
 #define DOLL '@'
 #define GHOST 'F'
 #define CAMINHO '.'
@@ -29,9 +32,8 @@ int ehpermitido_mapa(MAPA *m, int x, int y);
 void ler_mapa(MAPA *m);
 void aloca_mapa(MAPA *m);
 void libera_mapa(MAPA *m);
-void imprime_mapa(MAPA *m);
 int encontra_mapa(MAPA* m, POSICAO* p, char c);
-
+#endif
 // preciso passar o ponteiro como parâmetro para q a variavel funcione, pois variavel global funciona APENAS no ARQUIVO em q foi DECLARADA
 // mas para que uma variavel global seja GLOBAL DE VERDADE, preciso redeclarala como 'extern', exemplo:
 // em um aqruivo x.c:
