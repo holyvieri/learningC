@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 #include<time.h>
 #include "forca.h"
@@ -23,7 +24,7 @@ void escolhefeitico(){
     FILE* f;
     f = fopen("palavras.txt", "r");
     if (f==0){
-        printf("Desculpe, acho que um pelucio pegou nossas informaçoes brilhantes\n\n");
+        printf("Desculpe, acho que um pelucio pegou nossas informacoes brilhantes\n\n");
         exit(1);
     }
     
