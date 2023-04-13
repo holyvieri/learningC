@@ -28,8 +28,6 @@ int main(){
     // double permite o cálculo de decimais e sua máscara é %f
     double pontos = 1000;
 
-    int deu_bom = 0;
-
     int level;
     printf("Qual o nivel de dificuldade que queres?\n");
     printf("(1) Izi (2) Marromeno (3) Hard \n\n");
@@ -52,6 +50,7 @@ int main(){
 
     int chute;
     int tentativas=1;
+    int deu_bom;
   
   // for é p um loop q vá se repetir em uma quantidade de vezes exatas, o while é infinito
 
@@ -66,7 +65,7 @@ int main(){
             // usa continue qnd n quer quebrar o código, mas sim continuá-lo do inicio
             continue; 
         }
-        int deu_bom = (chute == numerosecreto);
+        deu_bom = (chute == numerosecreto);
         int menor = (chute < numerosecreto);
       // o == é de comparação e quando é Verdadeiro=1 ; Falso= 0
       // o else if tem q estar na MESMA LINHA que o FIM DO IF.
@@ -87,6 +86,7 @@ int main(){
         pontos = pontos - pontosperdidos;
     }
     
+    char answer;
     printf("Fim de jogo!\n");
 
     if (deu_bom){
@@ -107,11 +107,22 @@ int main(){
         printf("Acertasse em %d tentativas!\n", tentativas);
         // o .x dps do % vai me dar a quantidade de casas q eu quero q apareça
         printf("Total de pontos: %.1f\n", pontos);
+        printf("Quer jogar mais uma partida?[S/N]\n");
+        scanf(" %c", &answer);
+
+        switch (answer){
+        case 'S' :
+            main();
+            break;
+        default:
+            break;
+        }
+
     }else{
         printf("         __---__                      \n");
         printf(" .   .-'...:...'-.               .          . \n");
         printf("    / .  . : .__ .\\                                         . \n");
-        printf("   /........./  \\ .\\  .   .   Ah naoooooooooo!        . \n");
+        printf("   /........./  \\ .\\  .   .   Ah naoooooooooo! O numero secreto era %d .       . \n", numerosecreto);
         printf("  / :  :   :| () | :\\            Perdesse, mas tenta de novo!    .       \n");
         printf(" :...........\\__/....:         .    \n");
         printf(" |___________________|              .                     .  \n");
@@ -123,5 +134,15 @@ int main(){
         printf("      -..___..-                .         . \n");
         printf("\n\n");
     
+        printf("Quer jogar mais uma partida?[S/N]\n");
+        scanf(" %c", &answer);
+        
+        switch (answer){
+        case 'S' :
+            main();
+            break;
+        default:
+            break;
+        }
     }
 }
